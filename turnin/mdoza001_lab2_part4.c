@@ -22,7 +22,7 @@ int main(void) {
 	unsigned char weightA, weightB, weightC, temp1,temp2,temp3;
 	unsigned short total;
 	
-	
+ //sol	
   /* Insert your solution below */
     while (1) {
 
