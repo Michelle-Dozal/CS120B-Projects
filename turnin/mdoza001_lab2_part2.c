@@ -19,7 +19,7 @@ int main(void) {
 	unsigned char temp1, temp2,temp3,temp4;
 	unsigned char cntavail;
 
-    /* :) Insert your solution below */
+    /*  Insert your solution below */
     while (1) {
 	temp1 = PINA & 0x01;
 	temp2 = PINA & 0x02;
