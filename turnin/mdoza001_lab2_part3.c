@@ -33,9 +33,9 @@ int main(void) {
 	if(temp2 == 0x02){temp2 = 1;}
 	if(temp3 == 0x04){temp3 = 1;}
 	if(temp4 == 0x08){temp4 = 1;}
-	cntavail = temp1+temp2+temp3+temp4;
+	cntavail = 4 - (temp1+temp2+temp3+temp4);
 	PORTC = cntavail;
-  	if(cntavail == 4){PORTC = cntavail | 0x80;}
+  	if(cntavail == 0){PORTC = cntavail | 0x80;}
 }
     return 1;
 }

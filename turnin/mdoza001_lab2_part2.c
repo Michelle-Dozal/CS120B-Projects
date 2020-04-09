@@ -30,7 +30,7 @@ int main(void) {
 	if(temp3 == 0x04){temp3 = 1;}
 	if(temp4 == 0x08){temp4 = 1;}
 	
-	cntavail = temp1+temp2+temp3+temp4;
+	cntavail = 4 - (temp1+temp2+temp3+temp4);
 	PORTC = cntavail;
 }
     return 1;
