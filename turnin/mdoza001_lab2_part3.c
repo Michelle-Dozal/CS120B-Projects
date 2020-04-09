@@ -1,7 +1,7 @@
 /*	Author: mdoza001
  *	Lab Section: 24
- *	Assignmen: Lab #1  Exercise #2
- *	Exercise Description: Garage door system
+ *	Assignmen: Lab #1  Exercise #3
+ *	Exercise Description: Parking Sensors
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
@@ -11,10 +11,6 @@
 #include "simAVRHeader.h"
 #endif
 
-
-unsigned char GetBit(unsigned char x, unsigned char k) {
-   return ((x & (0x01 << k)) != 0);
-}
 
 
 int main(void) {
@@ -28,12 +24,6 @@ int main(void) {
 	
   /* Insert your solution below */
     while (1) {
-/*	cntavail = 0;
-	for(unsigned char i = 0; i < 3; i++){
-	if(GetBit(PINA,i)){
-	   cntavail++;}
-	} */
-//	PORTC = cntavail;
 	temp1 = PINA & 0x01;
 	temp2 = PINA & 0x02;
 	temp3 = PINA & 0x04;
@@ -46,7 +36,6 @@ int main(void) {
 	cntavail = temp1+temp2+temp3+temp4;
 	PORTC = cntavail;
   	if(cntavail == 4){PORTC = cntavail | 0x80;}
-//	PORTC = cntavail;
 }
     return 1;
 }

@@ -26,7 +26,7 @@
 echo ======================================================\n
 echo Running all tests..."\n\n
 
-# Example test:
+#: Example test:
 #test "PINA: 0x00, PINB: 0x00 => PORTC: 0"
 # Set inputs
 #setPINA 0x00
