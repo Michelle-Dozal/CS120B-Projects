@@ -1,5 +1,5 @@
 # Test file for "Lab_3"
-
+#part2
 
 # commands.gdb provides the following functions for ease:
 #   test "<message>"
