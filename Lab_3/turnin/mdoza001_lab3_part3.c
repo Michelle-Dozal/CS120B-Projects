@@ -22,7 +22,7 @@ int main(void) {
 	unsigned char per = PINA & 0x20;
 	unsigned char igni= PINA & 0x10;
 	unsigned char beltl = PINA & 0x40;	
-   //	input = PINA;
+   ///	input = PINA;
 	 while (1) {
      input = PINA;
 	   if((input & 0x00) == 0x00){fuel = 0x00;}
