@@ -1,6 +1,6 @@
 # Test file for "Lab_3"
 
-
+#testing
 # commands.gdb provides the following functions for ease:
 #   test "<message>"
 #       Where <message> is the message to print. Must call this at the beginning of every test
