@@ -1,6 +1,6 @@
 /*	Author: mdoza001
  *  Partner(s) Name: 
- **	Lab Section:
+ ***	Lab Section:
  *	Assignment: Lab #3  Exercise #5
  *	Exercise Description: [optional - include for your own benefit]
  *
