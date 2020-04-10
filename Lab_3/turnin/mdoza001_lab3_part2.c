@@ -28,7 +28,7 @@ int main(void) {
 		if(input < 5) {temp--;}
 		if(input < 3) {temp--;}
 	switch(temp)
-{
+     {
 	case 6: fuel = 0x3F;break;
 	case 5: fuel = 0x3E;break;
 	case 4: fuel = 0x3C;break;
