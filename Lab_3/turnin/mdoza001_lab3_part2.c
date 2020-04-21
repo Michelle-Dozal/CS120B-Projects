@@ -17,25 +17,29 @@ int main(void) {
 	DDRA = 0x00; PORTA = 0xFF;
 	DDRC = 0xFF; PORTC = 0x00;
     /* Insert your solution below */
-	unsigned char input, fuel;	
+	unsigned char input, fuel;
+    while(1){
    	//input = PINA;
-	 while (1) {
-	input = PINA;	
-	int temp = 6;
-		if(input < 13) {temp--;}
-		if(input < 10) {temp--;}
-		if(input < 7)  {temp--;}
-		if(input < 5) {temp--;}
-		if(input < 3) {temp--;}
-	switch(temp)
-     {
-	case 6: fuel = 0x3F;break;
-	case 5: fuel = 0x3E;break;
-	case 4: fuel = 0x3C;break;
-	case 3: fuel = 0x38;break;
-	case 2: fuel = 0x30;break;
-	case 1: fuel = 0x20;break;}
-	PORTC = fuel;	
-
+    input = PINA;
+           if((input & 0x00) == 0x00){fuel = 0x40;}
+          if((input& 0x01) == 0x01){fuel = 0x60;}
+          if((input & 0x02) == 0x02){fuel = 0x60;}
+          if((input & 0x03) == 0x03){fuel = 0x70;}
+          if((input & 0x04) == 0x04){fuel = 0x70;}
+          if((input & 0x05) == 0x05){fuel = 0x38;}
+          if((input & 0x06) == 0x06){fuel = 0x38;}
+          if((input & 0x07) == 0x07){fuel = 0x3C;}
+          if((input & 0x08) == 0x08){fuel = 0x3C;}
+          if((input &  0x09) == 0x09){fuel = 0x3C;}
+          if((input &  0x0A) == 0x0A){fuel = 0x3E;}
+          if((input & 0x0B) == 0x0B){fuel = 0x3E;}
+          if((input &  0x0C) == 0x0C){fuel = 0x3E;}
+          if((input & 0x0D)  == 0x0D){fuel = 0x3F;}
+          if((input &  0x0E) == 0x0E){fuel = 0x3F;}
+          if((input &  0x0F) == 0x0F){fuel = 0x3F;}
+            
+       PORTC = fuel;
+    }
     return 1;
+    
 }

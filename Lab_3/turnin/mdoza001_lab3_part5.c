@@ -18,16 +18,23 @@ int main(void) {
 	DDRB = 0xFE; PORTB = 0x01;
 	
     /* Insert your solution below */
-	unsigned char temp1, temp2;
-	unsigned short temp3;
+	//unsigned char temp;
+	unsigned short lbs;
+    unsigned short temp;
+    
 	 while (1) {
-        temp = (PINB & 0x01);
-	temp2 = (temp2 | temp1);
+        lbs = (PIND  << 1);
+         temp = (PINB & 0x01);
+         lbs = lbs | temp;
+         //lbs = PINB + PIND;
 	
-	if(temp2 >= 70){ temp3 = 0x02;}
-	else if ((temp2 < 70) && (temp2 > 5)){temp3 = 0x04;}
+         if(lbs >= 70){ PORTB = 0x02;}
+	
+         else if ((lbs > 5) && (lbs < 70)) {PORTB = 0x04;}
+          else{PORTB = 0x00;}
+         //if(lbs == 5){PORTB = 0x00;}
 
-	PORTB = temp3;
+
 
 }	
 	return 1; }

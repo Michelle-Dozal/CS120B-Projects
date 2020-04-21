@@ -19,12 +19,15 @@ int main(void) {
     /* Insert your solution below */
 	unsigned char input;
 	unsigned char fuel;
-	unsigned char per = PINA & 0x20;
-	unsigned char igni= PINA & 0x10;
-	unsigned char beltl = PINA & 0x40;	
+	unsigned char per;
+	unsigned char igni;
+	unsigned char beltl;
    ///	input = PINA;
 	 while (1) {
      input = PINA;
+         per = PINA & 0x20;
+         igni = PINA & 0x10;
+         beltl = PINA & 0x40;
 	   if((input & 0x00) == 0x00){fuel = 0x00;}
 	 if((input& 0x01) == 0x01){fuel = 0x60;}
 	  if((input & 0x02) == 0x02){fuel = 0x60;}
@@ -42,12 +45,20 @@ int main(void) {
 	  if((input &  0x0E) == 0x0E){fuel = 0x3F;}
 	  if((input &  0x0F) == 0x0F){fuel = 0x3F;}
 		
-	if(per == 0x20){
-	if (igni == 0x10){
-		if(beltl == 0x40){
-			PORTC = fuel;}
-		else {PORTC = fuel | 0xA0;}
-	}
+    if(igni == 0x10){
+        if(per != 0x20){
+            PORTC = fuel;}
+        
     }
-   PORTC = fuel;
-}	return 1; }
+
+    if(igni == 0x10){
+        if (per == 0x20){
+            if(beltl != 0x40){
+                PORTC = fuel | 0x80 | input;}
+                else {PORTC = fuel;}
+                }
+                }
+   else { PORTC = fuel;}
+    }
+    return 1;
+}
