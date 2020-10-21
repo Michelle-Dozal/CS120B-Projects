@@ -1,0 +1,148 @@
+/*	Author: mdoza001
+ *  Partner(s) Name: 
+ *	Lab Section:
+ *	Assignment: Lab #7  Exercise #1
+ *	Exercise Description: [optional - include for your own benefit]
+ *
+ e*	I acknowledge all content contained herein, excluding template or example
+ *	code, is my own original work.
+ */
+#include <avr/io.h>
+#ifdef _SIMULATE_
+#include "simAVRHeader.h"
+#endif
+
+//TIMER.h
+volatile unsigned char TimerFlag = 0;
+
+unsigned long _avr_timer_M = 1;
+unsigned long _avr_timer_cntcurr = 0;
+
+void TimerOn() {
+  TCCR1B = 0x0B;
+  OCR1A = 125;
+  TIMSK1 = 0x02;
+  TCNT1 = 0;
+  _avr_timer_cntcurr = _avr_timer_M;
+  SREG |= 0x80;
+}
+
+void TimerOff() {
+  TCCR1B = 0x00;
+}
+
+void TimerISR() {
+  TimerFlag = 1;
+}
+
+ISR(TIMER1_COMPA_vect) {
+    _avr_timer_cntcurr--;
+    if (_avr_timer_cntcurr == 0) {
+        TimerISR();
+        _avr_timer_cntcurr = _avr_timer_M; }
+}
+
+void TimerSet(unsigned long M) {
+    _avr_timer_M = M;
+    _avr_timer_cntcurr = _avr_timer_M;
+}
+
+//END OF TIMER.H
+
+enum states{START,INC,DEC, RES, WAIT, WAIT2,WAIT3} state;
+unsigned char temp;
+
+void tick(){
+unsigned char button1 = ~PINA & 0x01;
+unsigned char button2 = ~PINA & 0x02;
+
+    
+    switch(state){ //Transitions
+    
+    
+    case START:
+    if(button1 && button2){state = WAIT3;}
+    else if(button1){state = INC;}
+    else if(button2){state = DEC;}
+    else{state = START;}
+    break;
+
+    case INC:
+    state = START;
+    break;
+
+    case WAIT:
+     if(!button1 ) {state = INC;}
+    else {state = WAIT1;}
+    break;
+   
+
+    case DEC:
+    state = START;
+    break;
+
+    case WAIT2:
+     if(!button1 ) {state = DEC;}
+    else {state = WAIT2;}
+    break;
+    
+    case WAIT3:
+    if(button2 || !button1){state = RES;}
+    else {state = WAIT3;}
+    break;
+            
+            
+    case RES:
+    state = START;
+    break;
+
+    }
+
+    switch(state){ //State actions
+    case START:
+    break;
+            
+    case WAIT:
+    break;
+
+    case INC:
+    if(temp < 0x09){temp = temp + 1;}
+    else if (temp == 0x09) {temp = 0x09;}
+    break;
+
+    case DEC:
+    if(temp <= 0x00){temp = 0x00;}
+    else {temp = temp - 1;}
+    break;
+
+    case RES:
+    temp = 0x00;
+    break;
+    
+    default: break;}
+
+    }
+
+int main(void) {
+    /* Insert DDR and PORT initializations */
+        DDRA = 0x00; PORTA = 0xFF;
+         DDRC = 0xFF; PORTC = 0x00;
+         DDRD = 0xFF; PORTD = 0x00;
+    
+        state = START;
+    /* Insert your solution below */
+    temp = 0x07;
+    TimerSet(100);
+    TimerOn();
+    LCD_init();
+    LCD_Cursor(1);
+    
+    while (1) {
+    tick();
+        while (!TimerFlag){break;}
+        TimerFlag = 0;
+        PORTC = temp;
+        LCD_WriteData(temp + '0');
+    }
+    return 1;
+}
