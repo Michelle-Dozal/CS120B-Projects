@@ -1,0 +1,48 @@
+/*	Author: mdoza001
+ *  Partner(s) Name: 
+ *	Lab Section:
+ *	Assignment: Lab #8  Exercise #4
+ *	Exercise Description: [optional - include for your own benefit]
+ *
+ e*	I acknowledge all content contained herein, excluding template or example
+ *	code, is my own original work.
+ */
+#include <avr/io.h>
+#ifdef _SIMULATE_
+#include "simAVRHeader.h"
+#endif
+
+void ADC_init(){
+    ADCSRA |= (1 << ADEN) | (1 << ADSC) | (1 << ADATE);
+    }
+
+int main(void) {
+    /* Insert DDR and PORT initializations */
+         DDRA = 0x00; PORTA = 0xFF;
+         DDRB = 0xFF; PORTB = 0x00;
+         DDRC = 0xFF; PORTC = 0x00;
+      
+    /* Insert your solution below */
+    ADC_init();
+    unsigned short max = 100;
+    unsigned char temp = 0x00;
+    
+    while (1) {
+       
+        unsigned short my_short = ADC;
+        if (my_short <= 0) {output = 0x00;}
+        else if (my_short >= max) {temp = 0xFF;}
+        else if (my_short >= 75) {temp = 0x7F;}
+        else if (my_short >= 65) {temp = 0x3F;}
+        else if (my_short >= 50) {temp = 0x1F;}
+        else if (my_short >= 45) {temp = 0x0F;}
+        else if (my_short >= 35)  {temp = 0x07;}
+        else if (my_short >= 20)  {temp = 0x03;}
+        else if (my_short < 10)   {temp = 0x01;}
+          
+        PORTC = temp;
+        
+    }
+    
+    return 1;
+}
