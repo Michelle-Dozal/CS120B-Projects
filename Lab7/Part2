@@ -1,0 +1,153 @@
+/*	Author: mdoza001
+ *  Partner(s) Name: 
+ *	Lab Section:
+ *	Assignment: Lab #7  Exercise #2
+ *	Exercise Description: [optional - include for your own benefit]
+ *
+ e*	I acknowledge all content contained herein, excluding template or example
+ *	code, is my own original work.
+ */
+#include <avr/io.h>
+#ifdef _SIMULATE_
+#include "simAVRHeader.h"
+#endif
+
+//TIMER.h
+volatile unsigned char TimerFlag = 0;
+
+unsigned long _avr_timer_M = 1;
+unsigned long _avr_timer_cntcurr = 0;
+
+void TimerOn() {
+  TCCR1B = 0x0B;
+  OCR1A = 125;
+  TIMSK1 = 0x02;
+  TCNT1 = 0;
+  _avr_timer_cntcurr = _avr_timer_M;
+  SREG |= 0x80;
+}
+
+void TimerOff() {
+  TCCR1B = 0x00;
+}
+
+void TimerISR() {
+  TimerFlag = 1;
+}
+
+ISR(TIMER1_COMPA_vect) {
+    _avr_timer_cntcurr--;
+    if (_avr_timer_cntcurr == 0) {
+        TimerISR();
+        _avr_timer_cntcurr = _avr_timer_M; }
+}
+
+void TimerSet(unsigned long M) {
+    _avr_timer_M = M;
+    _avr_timer_cntcurr = _avr_timer_M;
+}
+
+//END OF TIMER.H
+
+enum STATES {START, ONE, TWO, THREE,FOUR, STOP} state;
+unsigned char output = 0x00;
+unsigned char score = 0;
+
+void tick() {
+
+unsigned char button = ~PINA & 0x01;
+    
+    switch(state){
+            
+        case START:
+            state = ONE;
+            break;
+        case ONE:
+            if(button){
+                state = STOP;
+                score--;
+            }
+            else { state = TWO;}
+            break;
+        case TWO:
+            if(button){
+                state = STOP;
+                score++;
+            }
+            else { state = THREE;}
+            break;
+        case THREE:
+            if(button){
+                state = STOP;
+                score--;
+            }
+            else {state = FOUR;}
+            break;
+            
+        case FOUR:
+            if(button) {state = STOP; score++}
+            else {state = ONE;}
+            break;
+        
+        case STOP:
+            if(!button){ 
+                state = START;
+            }
+            else {state = STOP;}
+            break;
+            
+        
+        default: state = START; break;
+            
+    }
+    
+    switch(state){
+        case START:
+            break;
+        case ONE:
+            output = 0x01;
+            break;
+        case TWO:
+            output = 0x02;
+            break;
+        case THREE:
+            output = 0x04;
+            break;
+        case FOUR:
+            output = 0x02;
+            break;
+        case STOP:
+            output = output;
+            break;
+    }
+    
+}
+
+int main(void) {
+    /* Insert DDR and PORT initializations */
+    DDRA = 0x00; PORTA = 0xFF;
+    DDRB = 0xFF; PORTB = 0x00;
+    DDRC = 0xFF; PORTC = 0x00;
+    DDRD = 0xFF; PORTD = 0x00;
+    
+    TimerSet(300);
+    TimerOn();
+    state = START;
+    score = 5;
+    LCD_init();
+    LCD_Cursor(1);
+    
+    while(1){
+    
+    tick();
+    while (!TimerFlag){}
+        if (score >= 9){ LCD_DisplayString(1, "WINNER");}
+        else {LCD_WriteData(score + '0');}
+        
+    TimerFlag = 0;
+    PORTB = output;
+}
+ 
+    return 1;
+    
+}
